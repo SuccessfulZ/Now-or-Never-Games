@@ -34,7 +34,13 @@ public class PlayerStashUI : MonoBehaviour, IPlayerStashMessages
     public bool RemoveResource(ResourceBundle takePackage)
     {
         // TODO: update counter
-        // TODO: show story from StoryPicker
+        var picker = GlobalConstants.StoryPicker;
+        if (picker != null)
+        {
+            Story story = picker.PickStory();
+            //storyText.text = story.text;
+            //storyCaption.text = story.title;
+        }
         return true;
     }
 
