@@ -5,32 +5,54 @@ using UnityEngine.UI;
 
 public class CountdownControl : MonoBehaviour
 {
-    public int countdownTime;
-    public Text countdownDisplay;
-    
-    void Start()
+    public Image cooldown;
+    private bool coolingDown = false;
+    private float waitTime = 7.0f; //Game time
+    private int secondsWait = 2;
+    public SceneManager sceneManager;
+
+    private void Start()
     {
-        
+        StartTimeCount();
+    }
+   
+   
+    void Update()
+    {
+
+        ReduceTime();
+        CheckTime();
+
     }
 
-  
-    IEnumerator CountdownToEnd()
+    public void StartTimeCount()
     {
-        while (countdownTime > 0)
+        // sceneManager.GameEndControl(); // turn off pause panel    
+        WaitForStart();//Few seconds for make User ready for the game
+         coolingDown = true;
+    }
+
+    public void ReduceTime()
+    {
+        if (coolingDown == true)
         {
-            countdownDisplay.text = countdownTime.ToString();
-
-            yield return new WaitForSeconds(1f);
-
-            countdownTime--;
+            //Reduce fill amount over 3 minutes
+            cooldown.fillAmount -= 1.0f / waitTime * Time.deltaTime;
         }
-
-
-
-        countdownDisplay.text = "Game Over";
+    }
+     public void CheckTime()
+    { //check if time of game is over
+        if (cooldown.fillAmount == 0)
+        {
+            sceneManager.GameEndControl(); //turn on pause panel
+            coolingDown = false;
+            cooldown.fillAmount = 1;
+        }
     }
 
-    
-
+    IEnumerator WaitForStart()
+    {
+        yield return new WaitForSeconds(secondsWait);
+    }
 
 }
