@@ -4,6 +4,7 @@ using UnityEngine;
 public class ResourceRandomizer : MonoBehaviour
 {
     public GameObject[] housePoints;
+    public int housesPerRound = 5;
 
     private static ResourceType[] _allResourceTypes = new ResourceType[]
     {
@@ -11,6 +12,11 @@ public class ResourceRandomizer : MonoBehaviour
         ResourceType.Mail,
         ResourceType.VideoGames,
     };
+
+    public void Start()
+    {
+        GenerateSpots(GlobalConstants.Player.position, housesPerRound);
+    }
 
     public void GenerateSpots(Vector3 playerPos, int count)
     {
@@ -20,6 +26,8 @@ public class ResourceRandomizer : MonoBehaviour
             .OrderBy(x => Random.value)
             .Take(count)
             .ToList();
+
+        foreach (var go in missingHouses) GenerateHouseSpot(go);
     }
 
     public void GenerateHouseSpot(GameObject house)

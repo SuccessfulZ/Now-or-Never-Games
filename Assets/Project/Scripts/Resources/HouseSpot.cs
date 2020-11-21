@@ -6,6 +6,39 @@ public class HouseSpot : MonoBehaviour
 {
     public ResourceBundle[] requests;
 
+    private PlayerStash player;
+
+    public void Start()
+    {
+        player = GlobalConstants.Player.GetComponent<PlayerStash>();
+    }
+
+    public void Update()
+    {
+        if (Input.GetButtonDown("Submit") && CheckPlayer(player.transform))
+        {
+            if (PlayerHasResources())
+            {
+                for (int i = 0; i < requests.Length; ++i)
+                {
+                    player.SendMessage(nameof(player.RemoveResource), requests[i]);
+                }
+            }
+        }
+    }
+
+    public bool PlayerHasResources()
+    {
+        for (int i = 0; i < requests.Length; ++i)
+        {
+            var currentBundle = player.stash.Find(x => x.type == requests[i].type);
+            if (currentBundle == null) return false;
+            if (currentBundle.count < requests[i].count) return false;
+        }
+
+        return true;
+    }
+
     public bool CheckPlayer(Transform player)
     {
         if (player == null) return false;
