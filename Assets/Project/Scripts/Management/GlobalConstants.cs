@@ -14,6 +14,7 @@ public class GlobalConstants : MonoBehaviour
     public float houseSpawnRadius = 50f;
 
     public Transform player;
+    public ResourceRandomizer resourceRandomizer;
 
     public int resourceCountTotalChance = 10;
     public int[] resourceCountChances = new int[]
@@ -32,6 +33,7 @@ public class GlobalConstants : MonoBehaviour
     public static float HouseSpawnRadius => Singleton.houseSpawnRadius;
 
     public static Transform Player => Singleton?.player;
+    public static ResourceRandomizer ResourceRandomizer => Singleton?.resourceRandomizer;
 
     public static int ResourceCountTotalChance => Singleton.resourceCountTotalChance;
     public static int[] ResourceCountChances => Singleton.resourceCountChances;

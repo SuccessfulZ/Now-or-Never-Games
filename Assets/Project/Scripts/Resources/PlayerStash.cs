@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerStash : MonoBehaviour
+public class PlayerStash : MonoBehaviour, IPlayerStashMessages
 {
     public List<ResourceBundle> stash;
     public ResourceBundle[] maxResources;
@@ -11,6 +11,16 @@ public class PlayerStash : MonoBehaviour
     void Start()
     {
         
+    }
+
+    public void ApproachedHouse()
+    {
+
+    }
+
+    public void LeftHouse()
+    {
+
     }
 
     public bool RefillResource(ResourceBundle putPackage)

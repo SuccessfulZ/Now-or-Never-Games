@@ -15,9 +15,10 @@ public class HouseSpot : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetButtonDown("Submit") && CheckPlayer(player.transform))
+        if (CheckPlayer(player.transform))
         {
-            if (PlayerHasResources())
+            //player.SendMessage(nameof(player.ApproachedHouse));
+            if (Input.GetButtonDown("Submit") && PlayerHasResources())
             {
                 for (int i = 0; i < requests.Length; ++i)
                 {
