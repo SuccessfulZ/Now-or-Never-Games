@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SceneManager : MonoBehaviour
 {
@@ -8,11 +9,44 @@ public class SceneManager : MonoBehaviour
     public GameObject playerInfoPanel;
     public GameObject gameEndPanel;
     public GameObject menuPanel;
+    public GameObject dialogueMessage;
+    public Text dialogueText;
+
+    public Image mailFiller, foodFiller, vgFiller;
 
     private void Start()
     {
         playerInfoPanel.gameObject.SetActive(true);
     }
+    public void DialogueShow(Story story)
+    {
+        dialogueText.text = $"\"{story.text}\" - {story.title}.";
+        Time.timeScale = 0;
+        dialogueMessage.SetActive(true);
+
+        var player = GlobalConstants.Player;
+        if (player != null)
+        {
+            var sources = player.GetComponents<AudioSource>();
+            foreach (var src in sources) src.enabled = false;
+        }
+    }
+
+    public void DialogueClose()
+    {
+        dialogueMessage.SetActive(false);
+        Time.timeScale = 1;
+        var stash = GlobalConstants.Player.GetComponent<PlayerStash>();
+        GlobalConstants.Player.SendMessage(nameof(stash.ContinueStory));
+
+        var player = GlobalConstants.Player;
+        if (player != null)
+        {
+            var sources = player.GetComponents<AudioSource>();
+            foreach (var src in sources) src.enabled = true;
+        }
+    }
+
     public void PauseControl()
     {
         if(Time.timeScale == 1)

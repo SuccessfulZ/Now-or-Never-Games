@@ -8,4 +8,5 @@ public interface IPlayerStashMessages
     void LeftHouse();
     bool RefillResource(ResourceBundle putPackage);
     bool RemoveResource(ResourceBundle takePackage);
+    void ContinueStory();
 }

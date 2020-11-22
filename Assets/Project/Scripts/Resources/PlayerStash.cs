@@ -69,4 +69,9 @@ public class PlayerStash : MonoBehaviour, IPlayerStashMessages
         }
         return false;
     }
+
+    public void ContinueStory()
+    {
+        
+    }
 }

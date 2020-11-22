@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceRandomizer : MonoBehaviour
@@ -15,7 +16,26 @@ public class ResourceRandomizer : MonoBehaviour
 
     public void Start()
     {
+        StartCoroutine(nameof(SpawnContinuous));
+    }
+
+    IEnumerator SpawnContinuous()
+    {
         GenerateSpots(GlobalConstants.Player.position, housesPerRound);
+        float nextWait = Random.Range(GlobalConstants.SpawnHouseTimerMin, GlobalConstants.SpawnHouseTimerMax);
+        Debug.Log($"Spawned {housesPerRound}. Next spawn in {nextWait}s");
+        yield return new WaitForSeconds(nextWait);
+
+        while (GlobalConstants.CountdownControl.TimeLeft > 0f)
+        {
+            nextWait = Random.Range(GlobalConstants.SpawnHouseTimerMin, GlobalConstants.SpawnHouseTimerMax);
+            if (GlobalConstants.SpawnHouseTimer)
+            {
+                GenerateSpots(GlobalConstants.Player.position, 1);
+                Debug.Log($"Spawned 1. Next spawn in {nextWait}s");
+            }
+            yield return new WaitForSeconds(nextWait);
+        }
     }
 
     public void GenerateSpots(Vector3 playerPos, int count)

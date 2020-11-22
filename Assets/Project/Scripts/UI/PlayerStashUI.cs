@@ -10,38 +10,77 @@ public class PlayerStashUI : MonoBehaviour, IPlayerStashMessages
 
     private Transform player;
 
-    public void Start()
-    {
-        player = GlobalConstants.Player;
-    }
-
     public void ApproachedHouse()
     {
-        housePromptText.gameObject.SetActive(true);
+        if (housePromptText != null)
+            housePromptText.gameObject.SetActive(true);
     }
 
     public void LeftHouse()
     {
-        housePromptText.gameObject.SetActive(false);
+        if (housePromptText != null)
+            housePromptText.gameObject.SetActive(false);
     }
 
     public bool RefillResource(ResourceBundle putPackage)
     {
-        // TODO: update counter
+        UpdateCounter(putPackage);
         return true;
     }
 
     public bool RemoveResource(ResourceBundle takePackage)
     {
-        // TODO: update counter
+        UpdateCounter(takePackage);
         var picker = GlobalConstants.StoryPicker;
         if (picker != null)
         {
             Story story = picker.PickStory();
-            //storyText.text = story.text;
-            //storyCaption.text = story.title;
+            GlobalConstants.SceneManager.DialogueShow(story);
         }
         return true;
+    }
+
+    private void UpdateCounter(ResourceBundle bundle)
+    {
+        var stashScript = player.GetComponent<PlayerStash>();
+        
+        int currentCount = 0;
+        if (stashScript.stash != null && stashScript.stash.Count != 0)
+        {
+            var res = stashScript.stash.Find(x => x.type == bundle.type);
+            if (res != null) currentCount = res.count;
+        }
+
+        int maxCount = GlobalConstants.MaxOfResource;
+        if (stashScript.maxResources != null && stashScript.maxResources.Length != 0)
+        {
+            var res = stashScript.maxResources.FirstOrDefault(x => x.type == bundle.type);
+            if (res != null) maxCount = res.count;
+        }
+
+        switch (bundle.type)
+        {
+            case ResourceType.Mail:
+                if (GlobalConstants.SceneManager?.mailFiller != null)
+                    GlobalConstants.SceneManager.mailFiller.fillAmount = (float)currentCount / maxCount;
+                break;
+            case ResourceType.Food:
+                if (GlobalConstants.SceneManager?.foodFiller != null)
+                    GlobalConstants.SceneManager.foodFiller.fillAmount = (float)currentCount / maxCount;
+                break;
+            case ResourceType.VideoGames:
+                if (GlobalConstants.SceneManager?.vgFiller != null)
+                    GlobalConstants.SceneManager.vgFiller.fillAmount = (float)currentCount / maxCount;
+                break;
+        }
+    }
+
+    public void Start()
+    {
+        player = GlobalConstants.Player;
+        UpdateCounter(new ResourceBundle() { type = ResourceType.Mail });
+        UpdateCounter(new ResourceBundle() { type = ResourceType.Food });
+        UpdateCounter(new ResourceBundle() { type = ResourceType.VideoGames });
     }
 
     void Update()
@@ -52,7 +91,7 @@ public class PlayerStashUI : MonoBehaviour, IPlayerStashMessages
             player.SendMessage(nameof(LeftHouse));
     }
 
-    bool HousesWithinRadius()
+    private bool HousesWithinRadius()
     {
         if (player == null) return false;
         var resourceRandomizer = GlobalConstants.ResourceRandomizer;
@@ -63,5 +102,16 @@ public class PlayerStashUI : MonoBehaviour, IPlayerStashMessages
         houses = houses.Where(x => x.GetComponent<HouseSpot>() != null);
 
         return houses.Select(x => x.GetComponent<HouseSpot>()).Any(x => x.CheckPlayer(player));
+    }
+
+    public void ContinueStory()
+    {
+        if (GlobalConstants.SpawnHouseAfterStory)
+        {
+            int availableHouses = GlobalConstants.ResourceRandomizer.housePoints
+                .Count(x => x.GetComponent<HouseSpot>() != null);
+            if (availableHouses == 0)
+                GlobalConstants.ResourceRandomizer.GenerateSpots(player.position, 1);
+        }
     }
 }

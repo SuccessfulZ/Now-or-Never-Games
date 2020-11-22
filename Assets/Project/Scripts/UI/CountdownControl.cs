@@ -11,6 +11,7 @@ public class CountdownControl : MonoBehaviour
     private float secondsWait = 180;
     public Text timeText;
     //public SceneManager sceneManager;
+    public float TimeLeft => secondsWait;
 
     private void Start()
     {
@@ -43,7 +44,7 @@ public class CountdownControl : MonoBehaviour
     }
      public void CheckTime()
     { //check if time of game is over
-        if (secondsWait == 0)
+        if (secondsWait < 0f)
         {
            //sceneManager.GameEndControl(); //turn on pause panel
             coolingDown = false;
