@@ -91,6 +91,19 @@ public class SceneManager : MonoBehaviour
             menuPanel.gameObject.SetActive(false);
         }
     }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1;
+        menuPanel.gameObject.SetActive(false);
+        if (GlobalConstants.StoryPicker != null)
+        {
+            GlobalConstants.StoryPicker.ResetUnreadStories();
+            GlobalConstants.StoryPicker.ClearStories();
+            GlobalConstants.StoryPicker.LoadUnreadStories();
+        }
+    }
+
     public void ControlsInfo()
     {
         if (controlsInfo.gameObject.activeInHierarchy == false)
