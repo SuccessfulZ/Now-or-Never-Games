@@ -8,6 +8,9 @@ public class SceneManager : MonoBehaviour
     public GameObject playerInfoPanel;
     public GameObject gameEndPanel;
     public GameObject menuPanel;
+    public GameObject controlsInfo;
+    public GameObject creditsInfo;
+
 
     private void Start()
     {
@@ -53,5 +56,37 @@ public class SceneManager : MonoBehaviour
             Time.timeScale = 1;
             menuPanel.gameObject.SetActive(false);
         }
+    }
+    public void ControlsInfo()
+    {
+        if (controlsInfo.gameObject.activeInHierarchy == false)
+        {
+            controlsInfo.gameObject.SetActive(true);            
+        }
+        else
+        {
+            controlsInfo.gameObject.SetActive(false);
+        }
+    }
+    public void CreditsInfo()
+    {
+        if (creditsInfo.gameObject.activeInHierarchy == false)
+        {
+            creditsInfo.gameObject.SetActive(true);
+         }
+        else
+        {
+           creditsInfo.gameObject.SetActive(false);
+        }
+    }
+
+    public void GoToMenu()
+    {
+        menuPanel.gameObject.SetActive(true);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
