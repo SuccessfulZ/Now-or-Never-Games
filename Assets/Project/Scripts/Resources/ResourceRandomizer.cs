@@ -59,7 +59,7 @@ public class ResourceRandomizer : MonoBehaviour
             Destroy(spot);
             if (house.transform.GetChild(0).name.IndexOf(housePointPrefab.name) != -1)
             {
-                Destroy(house.transform.GetChild(0));
+                Destroy(house.transform.GetChild(0).gameObject);
             }
         }
         spot = house.AddComponent<HouseSpot>();
