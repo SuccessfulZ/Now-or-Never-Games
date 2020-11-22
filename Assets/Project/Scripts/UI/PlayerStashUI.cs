@@ -6,20 +6,22 @@ using UnityEngine.UI;
 
 public class PlayerStashUI : MonoBehaviour, IPlayerStashMessages
 {
-    public Text housePromptText;
-
     private Transform player;
 
     public void ApproachedHouse()
     {
-        if (housePromptText != null)
-            housePromptText.gameObject.SetActive(true);
+        if (GlobalConstants.SceneManager?.deliverHint != null)
+        {
+            GlobalConstants.SceneManager.deliverHint.SetActive(true);
+        }
     }
 
     public void LeftHouse()
     {
-        if (housePromptText != null)
-            housePromptText.gameObject.SetActive(false);
+        if (GlobalConstants.SceneManager?.deliverHint != null)
+        {
+            GlobalConstants.SceneManager.deliverHint.SetActive(false);
+        }
     }
 
     public bool RefillResource(ResourceBundle putPackage)

@@ -13,6 +13,7 @@ public class SceneManager : MonoBehaviour
     public Text dialogueText;
     public GameObject controlsInfo;
     public GameObject creditsInfo;
+    public GameObject deliverHint;
 
     public Image mailFiller, foodFiller, vgFiller;
 
