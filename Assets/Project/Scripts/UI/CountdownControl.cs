@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class CountdownControl : MonoBehaviour
 {
-    public Image cooldown;
+    //public float cooldown;
     private bool coolingDown = false;
     private float waitTime = 7.0f; //Game time
-    private int secondsWait = 2;
-    public SceneManager sceneManager;
+    private float secondsWait = 180;
+    public Text timeText;
+    //public SceneManager sceneManager;
 
     private void Start()
     {
@@ -19,7 +20,7 @@ public class CountdownControl : MonoBehaviour
    
     void Update()
     {
-
+        DisplayTime(secondsWait);
         ReduceTime();
         CheckTime();
 
@@ -37,22 +38,32 @@ public class CountdownControl : MonoBehaviour
         if (coolingDown == true)
         {
             //Reduce fill amount over 3 minutes
-            cooldown.fillAmount -= 1.0f / waitTime * Time.deltaTime;
+            secondsWait -= Time.deltaTime;
         }
     }
      public void CheckTime()
     { //check if time of game is over
-        if (cooldown.fillAmount == 0)
+        if (secondsWait == 0)
         {
-            sceneManager.GameEndControl(); //turn on pause panel
+           //sceneManager.GameEndControl(); //turn on pause panel
             coolingDown = false;
-            cooldown.fillAmount = 1;
+            secondsWait = 180;
         }
     }
 
     IEnumerator WaitForStart()
     {
         yield return new WaitForSeconds(secondsWait);
+    }
+
+    void DisplayTime(float timeToDisplay)
+    {
+        timeToDisplay += 1;
+
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
+
+        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
 }
