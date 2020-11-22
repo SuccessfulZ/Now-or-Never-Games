@@ -25,6 +25,7 @@ public class HouseSpot : MonoBehaviour
                     player.SendMessage(nameof(player.RemoveResource), requests[i]);
                 }
                 Destroy(this);
+                Destroy(transform.GetChild(0));
             }
         }
     }

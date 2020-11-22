@@ -5,6 +5,7 @@ using UnityEngine;
 public class ResourceRandomizer : MonoBehaviour
 {
     public GameObject[] housePoints;
+    public GameObject housePointPrefab;
     public int housesPerRound = 5;
 
     private static ResourceType[] _allResourceTypes = new ResourceType[]
@@ -53,9 +54,17 @@ public class ResourceRandomizer : MonoBehaviour
     public void GenerateHouseSpot(GameObject house)
     {
         HouseSpot spot = house.GetComponent<HouseSpot>();
-        if (spot != null) Destroy(spot);
+        if (spot != null)
+        {
+            Destroy(spot);
+            if (house.transform.GetChild(0).name.IndexOf(housePointPrefab.name) != -1)
+            {
+                Destroy(house.transform.GetChild(0));
+            }
+        }
         spot = house.AddComponent<HouseSpot>();
         spot.requests = GenerateRandomResourceTypes();
+        GameObject pref = Instantiate(housePointPrefab, house.transform, false);
     }
 
     public ResourceBundle[] GenerateRandomResourceTypes()
